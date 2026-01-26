@@ -6,16 +6,13 @@ public class ServiceInstance implements Serializable {
 	private String serviceId;
 	private String host;
 	private int port;
-	private boolean secure;
 	private long lastHeartbeat;
 	private Map<String, String> metadata;
 
-	public ServiceInstance(String serviceId, String host, int port,
-			boolean secure, Map<String, String> metadata) {
+	public ServiceInstance(String serviceId, String host, int port, Map<String, String> metadata) {
 		this.serviceId = serviceId;
 		this.host = host;
 		this.port = port;
-		this.secure = secure;
 		this.metadata = metadata;
 		this.lastHeartbeat = System.currentTimeMillis();
 	}
@@ -44,24 +41,18 @@ public class ServiceInstance implements Serializable {
 		return metadata;
 	}
 
-	public boolean isSecure() {
-		return secure;
-	}
-
 	public long getLastHeartbeat() {
 		return lastHeartbeat;
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		ServiceInstance that = (ServiceInstance) o;
-		return port == that.port &&
-				Objects.equals(serviceId, that.serviceId) &&
-				Objects.equals(host, that.host);
+		if (this == o)return true;
+		if (o instanceof ServiceInstance that)
+			return this.port == that.port &&
+				Objects.equals(this.host, that.host) &&
+				Objects.equals(this.serviceId, that.serviceId);
+		return false;
 	}
 
 	@Override
@@ -71,7 +62,8 @@ public class ServiceInstance implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("ServiceInstance{serviceId='" + serviceId + "', host='" + host +
-				"', port=" + port + "}"};
+		return String.format("ServiceInstance{serviceId=%s, host=%s, port=%d}",
+				serviceId, host, port);
 	}
 }
+
